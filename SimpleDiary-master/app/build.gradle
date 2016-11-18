@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.example.astoninfer.demo3"
+        minSdkVersion 21
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.prolificinteractive:material-calendarview:1.4.2'
+    compile 'me.imid.swipebacklayout.lib:library:1.0.0'
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/avoscloud-mixpush-v3.14.8.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/weibo.sdk.android.sso.3.0.1-leancloud.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/protobuf-java-2.6.1.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/qq.sdk.1.6.1.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/okio-1.6.0-leancloud.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/okhttp-2.6.0-leancloud.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/MiPush_SDK_Client_3_0_3.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/Java-WebSocket-1.3.2-leancloud.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/HwPush_SDK_V2705.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/fastjson.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/avoscloud-statistics-v3.14.8.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/avoscloud-sdk-v3.14.8.jar')
+    compile files('src/main/java/com/example/astoninfer/demo3/libs/avoscloud-push-v3.14.8.jar')
+}

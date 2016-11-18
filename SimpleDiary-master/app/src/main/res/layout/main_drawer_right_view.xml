@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+    <RelativeLayout
+        android:id="@+id/main_drawer_upper_layout"
+        android:layout_width="match_parent"
+        android:layout_height="270dp">
+        <com.example.astoninfer.demo3.RoundImageView
+            android:id="@+id/main_drawer_user_figure"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:layout_below="@id/main_drawer_user_figure"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/main_drawer_user_figure"
+            android:id="@+id/main_drawer_name_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="astoninfer"
+            android:textColor="@color/pure_white"
+            android:gravity="center_vertical|start"
+            android:paddingEnd="15dp"
+            android:textSize="23sp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"/>
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/main_drawer_lower_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/pure_white">
+        <ListView
+            android:id="@+id/main_drawer_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/proper_grey"
+            android:dividerHeight="0.3px"
+            android:padding="5dp">
+        </ListView>
+    </LinearLayout>
+</LinearLayout>
