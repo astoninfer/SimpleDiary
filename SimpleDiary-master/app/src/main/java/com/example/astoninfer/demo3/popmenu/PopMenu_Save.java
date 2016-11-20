@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.example.astoninfer.demo3.EditorActivity;
 import com.example.astoninfer.demo3.R;
+import com.example.astoninfer.demo3.richeditor.RichEditor;
 
 /**
  * Created by woi on 2016/11/12.
@@ -20,7 +23,9 @@ public class PopMenu_Save extends PopupWindow {
     private Activity context;
     private EditorActivity editorActivity;
     private View mMenuView;
-    public PopMenu_Save(Activity context, EditorActivity editorActivity) {
+    private EditText save_edit;
+    private TextView datetext,addresstext,savetext,canceltext;
+    public PopMenu_Save(Activity context, final EditorActivity editorActivity) {
         super(context);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -28,6 +33,29 @@ public class PopMenu_Save extends PopupWindow {
         this.context = context;
 
         mMenuView = inflater.inflate(R.layout.edit_save, null);
+
+        save_edit = (EditText) mMenuView.findViewById(R.id.save_edit);
+        datetext = (TextView) mMenuView.findViewById(R.id.save_date);
+        addresstext = (TextView) mMenuView.findViewById(R.id.save_address);
+        savetext = (TextView) mMenuView.findViewById(R.id.save_save);
+        canceltext = (TextView) mMenuView.findViewById(R.id.save_cancle);
+
+        savetext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = save_edit.getText().toString();
+                String date = datetext.getText().toString();
+                String address = addresstext.getText().toString();
+                editorActivity.savetodb(s,date,address);
+            }
+        });
+
+        canceltext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         this.setContentView(mMenuView);
         //设置SelectPicPopupWindow弹出窗体的宽

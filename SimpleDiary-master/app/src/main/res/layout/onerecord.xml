@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="110dp">
+    <LinearLayout
+        android:id="@+id/record_info"
+        android:layout_width="300dp"
+        android:layout_height="110dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/record_title"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="25sp"
+            android:paddingLeft="20dp"
+            android:textColor="#000000"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/record_date"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/record_address"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:paddingLeft="20dp"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/record_delete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="delete"/>
+</LinearLayout>

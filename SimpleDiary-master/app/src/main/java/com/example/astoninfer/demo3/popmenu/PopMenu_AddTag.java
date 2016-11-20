@@ -19,6 +19,7 @@ import com.example.astoninfer.demo3.FlowLayout;
 import com.example.astoninfer.demo3.R;
 import com.example.astoninfer.demo3.RecordFile;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -28,7 +29,7 @@ public class PopMenu_AddTag extends PopupWindow {
     private EditText edit_tag;
     private FlowLayout layout_tags;
     private Activity context;
-    LinkedList<String> taglist = new LinkedList<>();
+    ArrayList<String> taglist = new ArrayList<>();
     private int max_tag_num = 5;
     RecordFile recordFile;
     int i = 0;

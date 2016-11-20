@@ -23,6 +23,7 @@
             android:textSize="16sp"
             android:textColor="@color/pure_black"/>
         <EditText
+            android:id="@+id/save_edit"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginTop="10dp"
@@ -43,6 +44,7 @@
             android:layout_height="100dp"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/save_date"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -50,6 +52,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/pure_black"/>
             <TextView
+                android:id="@+id/save_address"
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -63,6 +66,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/save_save"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
@@ -72,6 +76,7 @@
                 android:textColor="@color/pure_white"
                 android:background="@color/colorPrimaryDark"/>
             <TextView
+                android:id="@+id/save_cancle"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_margin="5dp"

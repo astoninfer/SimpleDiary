@@ -59,7 +59,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EditorActivity extends AppCompatActivity {
-
+    public static final String DATABASE = "recordsaver";
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private final int PICK_PIC = 2;
     private final int REQUEST_EXTERNAL_STORAGE = 3;
@@ -82,8 +82,10 @@ public class EditorActivity extends AppCompatActivity {
     private Uri imageUri;
     private Map<Integer,Integer> mapcolor = new HashMap();
     private Map<Integer,Integer> mapsize = new HashMap<>();
+    private ArrayList<String> tags = new ArrayList<String>();
     private ArrayList<String> newImgPaths = new ArrayList<String>();
     private ArrayList<String> initImgpaths = new ArrayList<String>();
+    private DataBaseHelper dbhelper = new DataBaseHelper(this,DATABASE);
     View.OnClickListener choosecolor;
     View.OnClickListener choosesize;
     String local_file = Environment.getExternalStorageDirectory().getAbsolutePath() + "/down/";
@@ -105,6 +107,11 @@ public class EditorActivity extends AppCompatActivity {
         }
         initricheditor();
         init();
+        Intent intent = getIntent();
+        String loadpath = intent.getStringExtra(MainActivity.PATH_MESSAGE);
+        if(loadpath != "") {
+            load(loadpath);
+        }
     }
 
     private void initricheditor() {
@@ -427,7 +434,37 @@ public class EditorActivity extends AppCompatActivity {
         popMenu_save.showAtLocation(editTextActivityLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
     }
 
-    public void savefile() {
+    public void savetodb(String title,String date,String address) {
+        String path = savefile();
+        String s = "";
+        ArrayList<String> finalImgPaths = new ArrayList<String>();
+        String getimgurl = "(?<=<img.src=\").*?(?=\")";
+        Pattern pattern = Pattern.compile(getimgurl);
+        Matcher matcher = pattern.matcher(html);
+        while (matcher.find()) {
+            finalImgPaths.add(matcher.group().toString());
+        }
+        for(int i = 0;i < newImgPaths.size();i ++){
+            if(!finalImgPaths.contains(newImgPaths.get(i))) {
+                File file1 = new File(newImgPaths.get(i));
+                file1.delete();
+            }
+        }
+        recordFile.settitle(title);
+        recordFile.setAddress(address);
+        recordFile.setDate(date);
+        recordFile.setpath(path);
+        for(int i = 0;i < finalImgPaths.size();i ++) {
+            ImageInfo info = new ImageInfo(finalImgPaths.get(i),"","");
+            recordFile.addimginfo(info);
+        }
+        dbhelper.addRecord(recordFile);
+        richEditor.setHtml("");
+        load(path);
+    }
+
+
+    public String savefile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String f;
         f = local_file + "/" + timeStamp + ".txt";
@@ -444,22 +481,9 @@ public class EditorActivity extends AppCompatActivity {
         } catch(IOException e) {
             e.printStackTrace();
         }
-        String s = "";
-        ArrayList<String> finalImgPaths = new ArrayList<String>();
-        String getimgurl = "(?<=<img.src=\").*?(?=\")";
-        Pattern pattern = Pattern.compile(getimgurl);
-        Matcher matcher = pattern.matcher(html);
-        while (matcher.find()) {
-            finalImgPaths.add(matcher.group().toString());
-        }
-        for(int i = 0;i < newImgPaths.size();i ++){
-            if(!finalImgPaths.contains(newImgPaths.get(i))) {
-                File file1 = new File(newImgPaths.get(i));
-                file1.delete();
-            }
-        }
-        richEditor.setHtml("");
-        load(f);
+//        richEditor.setHtml("");
+//        load(f);
+        return f;
     }
 
     public void load(String path) {
@@ -481,6 +505,17 @@ public class EditorActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         richEditor.setHtml(html);
+//        String fileinfos = "";
+//        ArrayList<RecordFile> recordFiles = dbhelper.getAllRecord();
+//        for(int i = 0;i < recordFiles.size();i++) {
+//            String s = "";
+//            RecordFile rf = recordFiles.get(i);
+//            s += "title: " + rf.gettitle() + "\n";
+//            s += "date: " + rf.getDate() + " address: " + rf.getAddress() + "\n";
+//            s += "path: " + rf.getpath() + "\n";
+//            fileinfos += s;
+//        }
+//        richEditor.setHtml(fileinfos);
     }
 
     public void back(View view) {
@@ -678,4 +713,5 @@ public class EditorActivity extends AppCompatActivity {
         Drawable drawable = res.getDrawable(id, null);
         editTextActivityLayout.setBackground(drawable);
     }
+
 }

@@ -42,7 +42,7 @@ import com.prolificinteractive.materialcalendarview.format.TitleFormatter;
  */
 
 public class MainActivity extends FragmentActivity{
-
+    public static final String PATH_MESSAGE = "sendpath";
     private Animation myAnimation_Translate;
     private DrawerLayout drawerRightLayout;
     private ImageView main_figure;
@@ -118,7 +118,9 @@ public class MainActivity extends FragmentActivity{
         mainAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, EditorActivity.class));
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                intent.putExtra(PATH_MESSAGE,"");
+                startActivity(intent);
             }
         });
 
@@ -135,7 +137,12 @@ public class MainActivity extends FragmentActivity{
 
         //set record
         mainRecord = (TextView)this.findViewById(R.id.main_record);
-
+        mainRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,RecordListActivity.class));
+            }
+        });
     }
 
     /**
