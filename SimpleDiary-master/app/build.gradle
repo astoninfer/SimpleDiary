@@ -8,6 +8,7 @@ android {
         applicationId "com.example.astoninfer.demo3"
         minSdkVersion 21
         targetSdkVersion 24
+        renderscriptSupportModeEnabled  true
         versionCode 1
         versionName "1.0"
     }

@@ -29,9 +29,10 @@
     <color name="light_green">#00cc44</color>
     <color name="green">#009933</color>
     <color name="light_orange">#ff8d1a</color>
-    <color name="pure_white">#ffffff</color>
+    <color name="pure_white">#d4e9ee</color>
     <color name="proper_grey">#4d4d4d</color>
     <color name="light_clay_blue">#b3e1ff</color>
     <color name="pure_black">#000000</color>
+    <color name="glass_mask">#80ffffff</color>
     <color name="transparent">@android:color/transparent</color>
 </resources>

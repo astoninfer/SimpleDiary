@@ -13,11 +13,9 @@ import android.widget.TextView;
 
 import com.example.astoninfer.demo3.EditorActivity;
 import com.example.astoninfer.demo3.R;
-import com.example.astoninfer.demo3.richeditor.RichEditor;
 
-/**
- * Created by woi on 2016/11/12.
- */
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+
 
 public class PopMenu_Save extends PopupWindow {
     private Activity context;
@@ -25,7 +23,7 @@ public class PopMenu_Save extends PopupWindow {
     private View mMenuView;
     private EditText save_edit;
     private TextView datetext,addresstext,savetext,canceltext;
-    public PopMenu_Save(Activity context, final EditorActivity editorActivity) {
+    public PopMenu_Save(Activity context, final EditorActivity editorActivity, final SwipeBackLayout swipeBackLayout) {
         super(context);
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,6 +45,7 @@ public class PopMenu_Save extends PopupWindow {
                 String date = datetext.getText().toString();
                 String address = addresstext.getText().toString();
                 editorActivity.savetodb(s,date,address);
+                swipeBackLayout.setEnableGesture(true);
             }
         });
 
@@ -54,6 +53,7 @@ public class PopMenu_Save extends PopupWindow {
             @Override
             public void onClick(View v) {
                 dismiss();
+                swipeBackLayout.setEnableGesture(true);
             }
         });
 
@@ -87,4 +87,14 @@ public class PopMenu_Save extends PopupWindow {
         });
     }
 
+    public static void saveImmediate(EditorActivity activity){
+        LayoutInflater inflater = (LayoutInflater) activity.getBaseContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View mMenuView = inflater.inflate(R.layout.edit_save, null);
+        EditText save_edit = (EditText) mMenuView.findViewById(R.id.save_edit);
+        String s = save_edit.getText().toString();
+        String date = "DATE";
+        String addr = "ADDRESS";
+        activity.savetodb(s, date, addr);
+    }
 }

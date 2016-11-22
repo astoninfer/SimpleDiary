@@ -34,7 +34,10 @@
         <activity
             android:name=".PhotoAlbumActivity"
             android:theme="@style/AppThemeBack"></activity>
-        <activity android:name=".RecordListActivity"></activity>
+        <activity android:name=".RecordListActivity"
+            android:theme="@style/AppThemeBack"
+            >
+        </activity>
     </application>
 
 </manifest>

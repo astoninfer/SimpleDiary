@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecordListActivity extends AppCompatActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
+public class RecordListActivity extends SwipeBackActivity{
     private ListView listView;
     TheAdapter adapter;
 
@@ -18,6 +21,7 @@ public class RecordListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_list);
+        AuxUtil.setStatusBarColor(this, R.color.colorPrimaryDark);
         adapter = new TheAdapter(RecordListActivity.this, this) ;
         adapter.freshdata();
         listView = (ListView) findViewById(R.id.recordlist);

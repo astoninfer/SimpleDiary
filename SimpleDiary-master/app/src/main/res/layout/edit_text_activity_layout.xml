@@ -6,40 +6,25 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:clipToPadding="true"
-    android:background="@drawable/bj2"
     tools:context="com.example.astoninfer.demo3.EditorActivity">
     <RelativeLayout
-        android:id="@+id/edit_text_menu_above"
+        android:id="@+id/edit_view_menu_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="44dp">
         <TextView
-            android:id="@+id/Btn_Back"
-            android:layout_marginLeft="20dp"
-            android:layout_width="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_width="40dp"
+            android:textSize="15sp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:text="返回"
-            android:textSize="16dp"
-            android:gravity="center"
-            android:textColor="@color/pure_white"
-            android:background="@android:color/transparent"
-            android:onClick="back"/>
-        <TextView
-            android:id="@+id/Btn_Save"
-            android:layout_marginRight="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="保存"
-            android:textSize="16dp"
-            android:gravity="center"
-            android:textColor="@color/pure_white"
+            android:layout_alignParentRight="true"
             android:onClick="saveedit"
-            android:layout_alignParentRight="true"/>
+            android:gravity="center_horizontal|center_vertical"
+            android:text="保存"
+            android:textColor="@color/pure_white"/>
     </RelativeLayout>
-
     <LinearLayout
-        android:layout_below="@id/edit_text_menu_above"
+        android:layout_below="@+id/edit_view_menu_bar"
         android:id="@+id/edit_text_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -51,7 +36,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
-            android:padding="16dp"
+            android:padding="10dp"
             android:layout_weight="1"
             android:layerType="software">
         </com.example.astoninfer.demo3.richeditor.RichEditor>

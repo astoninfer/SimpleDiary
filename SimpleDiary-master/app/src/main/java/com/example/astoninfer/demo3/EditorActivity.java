@@ -12,6 +12,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +29,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +61,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EditorActivity extends AppCompatActivity {
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+
+public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout.SwipeListener {
     public static final String DATABASE = "recordsaver";
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private final int PICK_PIC = 2;
@@ -92,6 +98,26 @@ public class EditorActivity extends AppCompatActivity {
 
     RichEditor richEditor;
 
+    /********************************************************************
+     *
+     *
+     *
+     */
+    private boolean userPreferenceSaveOnExit = false;
+
+    public void onScrollStateChange(int state, float scrollPercent){
+
+    }
+
+    public void onEdgeTouch(int edgeFlag){
+        //saveedit();
+    }
+
+    public void onScrollOverThreshold(){
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +138,7 @@ public class EditorActivity extends AppCompatActivity {
         if(loadpath != "") {
             load(loadpath);
         }
+        getSwipeBackLayout().addSwipeListener(this);
     }
 
     private void initricheditor() {
@@ -283,6 +310,7 @@ public class EditorActivity extends AppCompatActivity {
             findViewById(id).setOnClickListener(choosesize);
         }
 
+        //setBlur();
     }
 
     /**
@@ -311,9 +339,14 @@ public class EditorActivity extends AppCompatActivity {
         }
         editTextLayout = (LinearLayout)this.findViewById(R.id.edit_text_layout);
         word_font = (LinearLayout)this.findViewById(R.id.WordFont);
+        richEditor =(RichEditor)this.findViewById(R.id.richEditor);
+        //richEditor.setBackgroundColor(getResources().getColor(R.color.clay_blue));
+        //richEditor.setB
 
         //note: initialize global layout
         editTextActivityLayout = (RelativeLayout)findViewById(R.id.edit_text_activity_layout);
+
+        setBG(R.drawable.bj2);
 
         setMenuBelow();
 
@@ -423,16 +456,19 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Save按钮的触发事件
-     * @param view
+     * @param
      */
-    public void saveedit(View view) {
-        PopMenu_Save popMenu_save = new PopMenu_Save(EditorActivity.this, this);
 
+    public void saveedit(View view) {
+        PopMenu_Save popMenu_save = new PopMenu_Save(EditorActivity.this, this, getSwipeBackLayout());
         editTextActivityLayout.requestFocus();
-        InputMethodManager im = (InputMethodManager) richEditor.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager im = (InputMethodManager) richEditor.getContext().
+                getSystemService(Context.INPUT_METHOD_SERVICE);
         im.hideSoftInputFromWindow(richEditor.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        popMenu_save.showAtLocation(editTextActivityLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+        popMenu_save.showAtLocation(editTextActivityLayout,
+                Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
     }
+
 
     public void savetodb(String title,String date,String address) {
         String path = savefile();
@@ -708,10 +744,30 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setBG(int id) {
-        Resources res = getResources();
-        Drawable drawable = res.getDrawable(id, null);
-        editTextActivityLayout.setBackground(drawable);
+    public void setBG(final int id) {
+        ViewTreeObserver vto = editTextActivityLayout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                editTextActivityLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int w = editTextActivityLayout.getWidth(),
+                        h = editTextActivityLayout.getHeight();
+                Bitmap bitmap = MemoryManager.loadBitmap(id, w, h, 10010);
+                bitmap = AuxUtil.blurBitmapByView(getBaseContext(), bitmap, 5);
+                editTextActivityLayout.setBackground(new BitmapDrawable(bitmap));
+                //richEditor.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                //richEditor.getBackground().setAlpha(50);
+            }
+        });
+        vto = richEditor.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                richEditor.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                richEditor.setBackgroundColor(getResources().getColor(R.color.glass_mask));
+                //richEditor.getBackground().setAlpha(50);
+            }
+        });
     }
 
 }
