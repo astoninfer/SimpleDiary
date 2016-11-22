@@ -59,7 +59,6 @@ public class PhotoAlbumActivity extends SwipeBackActivity{
     protected void onCreate(Bundle savedInstanceBundle){
         super.onCreate(savedInstanceBundle);
         setContentView(R.layout.photo_album_activity);
-        AuxUtil.setStatusBarColor(this, R.color.colorPrimaryDark);
 
         AVOSCloud.initialize(this, "CCArlD3TG7tC435zoOi1m4hO-gzGzoHsz", "hDFQb8gQmVkdDFj7jxoNWa8e");
 

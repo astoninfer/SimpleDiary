@@ -5,8 +5,9 @@
     android:layout_height="110dp">
     <LinearLayout
         android:id="@+id/record_info"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="110dp"
+        android:layout_weight="4"
         android:orientation="vertical">
         <TextView
             android:id="@+id/record_title"
@@ -31,7 +32,8 @@
     </LinearLayout>
     <Button
         android:id="@+id/record_delete"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:text="delete"/>
 </LinearLayout>

@@ -12,8 +12,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -29,7 +27,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,10 +58,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
-import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
-
-public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout.SwipeListener {
+public class EditorActivity extends AppCompatActivity {
     public static final String DATABASE = "recordsaver";
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private final int PICK_PIC = 2;
@@ -84,40 +78,21 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
     private ArrayList<View> pageListBelow;
     private ViewPager viewPager;
     private String html = "";
+    private String recordpath = "";
     boolean wordfont_visiable = false;
     private Uri imageUri;
     private Map<Integer,Integer> mapcolor = new HashMap();
     private Map<Integer,Integer> mapsize = new HashMap<>();
     private ArrayList<String> tags = new ArrayList<String>();
     private ArrayList<String> newImgPaths = new ArrayList<String>();
-    private ArrayList<String> initImgpaths = new ArrayList<String>();
-    private DataBaseHelper dbhelper = new DataBaseHelper(this,DATABASE);
+    private ArrayList<String> initImgPaths = new ArrayList<String>();
+//    private DataBaseHelper dbhelper = new DataBaseHelper(this,DATABASE);
+    private boolean newRecord;
     View.OnClickListener choosecolor;
     View.OnClickListener choosesize;
     String local_file = Environment.getExternalStorageDirectory().getAbsolutePath() + "/down/";
-    private RelativeLayout editViewMenuBar = null;
 
     RichEditor richEditor;
-
-    /********************************************************************
-     *
-     *
-     *
-     */
-    private boolean userPreferenceSaveOnExit = false;
-
-    public void onScrollStateChange(int state, float scrollPercent){
-
-    }
-
-    public void onEdgeTouch(int edgeFlag){
-        //saveedit();
-    }
-
-    public void onScrollOverThreshold(){
-
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,11 +110,14 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
         initricheditor();
         init();
         Intent intent = getIntent();
-        String loadpath = intent.getStringExtra(MainActivity.PATH_MESSAGE);
-        if(loadpath != "") {
-            load(loadpath);
+        recordpath = intent.getStringExtra(MainActivity.PATH_MESSAGE);
+        if(!recordpath.equals("")) {
+            load(recordpath);
+            newRecord = false;
         }
-        getSwipeBackLayout().addSwipeListener(this);
+        else {
+            newRecord = true;
+        }
     }
 
     private void initricheditor() {
@@ -311,7 +289,6 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
             findViewById(id).setOnClickListener(choosesize);
         }
 
-        //setBlur();
     }
 
     /**
@@ -340,16 +317,9 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
         }
         editTextLayout = (LinearLayout)this.findViewById(R.id.edit_text_layout);
         word_font = (LinearLayout)this.findViewById(R.id.WordFont);
-        richEditor =(RichEditor)this.findViewById(R.id.richEditor);
-        //richEditor.setBackgroundColor(getResources().getColor(R.color.clay_blue));
-        //richEditor.setB
 
         //note: initialize global layout
         editTextActivityLayout = (RelativeLayout)findViewById(R.id.edit_text_activity_layout);
-        editViewMenuBar = (RelativeLayout)this.findViewById(R.id.edit_view_menu_bar);
-        //editViewMenuBar.getBackground().setAlpha(95);
-
-        setBG(R.drawable.letterpaper003);
 
         setMenuBelow();
 
@@ -459,19 +429,22 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
 
     /**
      * Save按钮的触发事件
-     * @param
+     * @param view
      */
-
     public void saveedit(View view) {
-        PopMenu_Save popMenu_save = new PopMenu_Save(EditorActivity.this, this, getSwipeBackLayout());
-        editTextActivityLayout.requestFocus();
-        InputMethodManager im = (InputMethodManager) richEditor.getContext().
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        im.hideSoftInputFromWindow(richEditor.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        popMenu_save.showAtLocation(editTextActivityLayout,
-                Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-    }
+        if(newRecord) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd  HH-mm-ss");
+            String datastr = dateFormat.format(new Date());
+            recordFile.setDate(datastr);
+            recordFile.setAddress("北京");
+        }
+        PopMenu_Save popMenu_save = new PopMenu_Save(EditorActivity.this, this, recordFile);
 
+        editTextActivityLayout.requestFocus();
+        InputMethodManager im = (InputMethodManager) richEditor.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(richEditor.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        popMenu_save.showAtLocation(editTextActivityLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+    }
 
     public void savetodb(String title,String date,String address) {
         String path = savefile();
@@ -488,25 +461,42 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
                 File file1 = new File(newImgPaths.get(i));
                 file1.delete();
             }
+            else {
+                recordFile.addimginfo(new ImageInfo(newImgPaths.get(i),"",""));
+            }
+        }
+        for(int i = 0;i < initImgPaths.size();i++) {
+            if(!finalImgPaths.contains(initImgPaths.get(i))) {
+                String deleteimgpath = initImgPaths.get(i);
+                File file1 = new File(deleteimgpath);
+                file1.delete();
+                DataBaseHelper.deleteimg(deleteimgpath);
+            }
         }
         recordFile.settitle(title);
         recordFile.setAddress(address);
         recordFile.setDate(date);
         recordFile.setpath(path);
-        for(int i = 0;i < finalImgPaths.size();i ++) {
-            ImageInfo info = new ImageInfo(finalImgPaths.get(i),"","");
-            recordFile.addimginfo(info);
+        if(!newRecord) {
+            DataBaseHelper.updateRecord(recordFile);
         }
-        dbhelper.addRecord(recordFile);
-        richEditor.setHtml("");
-        load(path);
+        else {
+            DataBaseHelper.addRecord(recordFile);
+        }
+        finish();
+//        richEditor.setHtml("");
+//        load(path);
     }
 
-
     public String savefile() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String f;
-        f = local_file + "/" + timeStamp + ".txt";
+        if(!newRecord) {
+            f = recordpath;
+        }
+        else {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            f = local_file + "/" + timeStamp + ".txt";
+        }
         File file = new File(f);
         try {
             if(!file.exists()) {
@@ -544,6 +534,18 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
             e.printStackTrace();
         }
         richEditor.setHtml(html);
+        String getimgurl = "(?<=<img.src=\").*?(?=\")";
+        Pattern pattern = Pattern.compile(getimgurl);
+        Matcher matcher = pattern.matcher(html);
+        while (matcher.find()) {
+            String imagepath = matcher.group().toString();
+            initImgPaths.add(imagepath);
+        }
+
+        RecordFile infos = DataBaseHelper.queryrecord(path);
+        recordFile.settitle(infos.gettitle());
+        recordFile.setAddress(infos.getAddress());
+        recordFile.setDate(infos.getDate());
 //        String fileinfos = "";
 //        ArrayList<RecordFile> recordFiles = dbhelper.getAllRecord();
 //        for(int i = 0;i < recordFiles.size();i++) {
@@ -747,30 +749,10 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setBG(final int id) {
-        ViewTreeObserver vto = editTextActivityLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                editTextActivityLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int w = editTextActivityLayout.getWidth(),
-                        h = editTextActivityLayout.getHeight();
-                Bitmap bitmap = MemoryManager.loadBitmap(id, w, h, 10010);
-                //bitmap = AuxUtil.blurBitmapByView(getBaseContext(), bitmap, 5);
-                editTextActivityLayout.setBackground(new BitmapDrawable(bitmap));
-                //richEditor.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                //richEditor.getBackground().setAlpha(50);
-            }
-        });
-        vto = richEditor.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                richEditor.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                //richEditor.setBackgroundColor(getResources().getColor(R.color.glass_mask));
-                //richEditor.getBackground().setAlpha(50);
-            }
-        });
+    public void setBG(int id) {
+        Resources res = getResources();
+        Drawable drawable = res.getDrawable(id, null);
+        editTextActivityLayout.setBackground(drawable);
     }
 
 }

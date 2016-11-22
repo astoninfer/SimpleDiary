@@ -86,7 +86,7 @@ public class RecordFile {
 
     public ArrayList<ImageInfo> getimginfos() {
         ArrayList<ImageInfo> ts = new ArrayList<>();
-        for(int i = 0;i < tags.size();i ++) {
+        for(int i = 0;i < imginfos.size();i ++) {
             ts.add(imginfos.get(i));
         }
         return ts;

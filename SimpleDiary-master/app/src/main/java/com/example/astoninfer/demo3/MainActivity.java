@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.os.MemoryFile;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
@@ -49,13 +47,10 @@ public class MainActivity extends FragmentActivity{
     private DrawerLayout drawerRightLayout;
     private ImageView main_figure;
     private RelativeLayout rootLayout;
-    private RelativeLayout mainDisplayLayout;
+    private LinearLayout displayFragment;
     private ImageView mainAdd = null;
     private TextView mainAlbum = null;
     private TextView mainRecord = null;
-    private LinearLayout mainMenuBelow;
-    private LinearLayout calendarLayout;
-    private LinearLayout mainBlurView;
     private volatile boolean startAnimationSet = false;
 
     private enum slideAnimAction {
@@ -99,21 +94,14 @@ public class MainActivity extends FragmentActivity{
         //displayFragment = (LinearLayout) findViewById(R.id.main_display_fragment);
         ImageLoader.init(MainActivity.this);
 
-        //int w = AuxUtil.getScreenWidth(this), h = AuxUtil.getScreenHeight(this);
+        int w = AuxUtil.getScreenWidth(this), h = AuxUtil.getScreenHeight(this);
 
         //Bitmap bmp = MemoryManager.loadBitmap(R.drawable.img016, w, h, 2);
-        drawerRightLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        drawerRightLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.transparent));
         //drawerRightLayout.setBackground(new BitmapDrawable(bmp));
-
-        mainDisplayLayout = (RelativeLayout)this.findViewById(R.id.main_display_layout);
-        mainMenuBelow = (LinearLayout)this.findViewById(R.id.main_menu_below);
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View myCalendarView = inflater.inflate(R.layout.main_calendar_view, null);
-        calendarLayout = (LinearLayout) myCalendarView
-                .findViewById(R.id.calendarView_layout);
-        mainBlurView = (LinearLayout)this.findViewById(R.id.main_blur_view);
+        drawerRightLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        //drawerRightLayout.getBackground().setAlpha(50);
     }
-
 
     /**
      * note: this part for initialize buttons/texts/images in above menu
@@ -152,7 +140,7 @@ public class MainActivity extends FragmentActivity{
         mainRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RecordListActivity.class));
+                startActivity(new Intent(MainActivity.this,RecordListActivity.class));
             }
         });
     }
@@ -169,33 +157,6 @@ public class MainActivity extends FragmentActivity{
      * @// TODO: then use asynchronous thread to load image and other time
      * @// TODO: -consuming components
      */
-
-
-    protected void setBlur(){
-        ViewTreeObserver vto = mainDisplayLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mainDisplayLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mainDisplayLayout.buildDrawingCache();
-                Bitmap bitmap = mainDisplayLayout.getDrawingCache();
-                AuxUtil.blurByView(getApplicationContext(), bitmap, mainBlurView, 10);
-            }
-        });
-    }
-
-    private void resetBlur(){
-        ViewTreeObserver vto = mainDisplayLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mainDisplayLayout.buildDrawingCache();
-                Bitmap bitmap = mainDisplayLayout.getDrawingCache();
-                AuxUtil.blurByView(getApplicationContext(), bitmap, mainBlurView, 0);
-            }
-        });
-    }
-
 
     private void setDrawerRight() {
 
@@ -389,10 +350,8 @@ public class MainActivity extends FragmentActivity{
                 slideState state = getState(starter);
 
                 if (state == slideState.OPENING) {
-                    //setBlur();
                     state = slideState.OPEN;
                 } else {
-                    //resetBlur();
                     state = slideState.CLOSED;
                     starterLayout.setVisibility(View.GONE);
                 }
@@ -414,6 +373,85 @@ public class MainActivity extends FragmentActivity{
         starterLayout.startAnimation(myAnimation_Translate);
     }
 
+
+    private void startCalendarAnim(final slideAnimAction action) {
+        final LinearLayout calendarLayout = (LinearLayout)findViewById(R.id.calendarView_layout);
+
+        slideAnimAction nextAction = action;
+
+        synchronized (curCalendarState) {
+            if (curCalendarState == slideState.OPENING ||
+                    curCalendarState == slideState.CLOSING ||
+                    curCalendarState == slideState.CLOSED &&
+                            action == slideAnimAction.CLOSE ||
+                    curCalendarState == slideState.OPEN &&
+                    action == slideAnimAction.OPEN) {
+                return;
+            }
+            if (action == slideAnimAction.REVERSE) {
+                nextAction = curCalendarState == slideState.OPEN ? slideAnimAction.CLOSE :
+                        slideAnimAction.OPEN;
+                if (nextAction == slideAnimAction.OPEN) curCalendarState = slideState.OPENING;
+                else curCalendarState = slideState.CLOSING;
+            }
+        }
+        final LinearLayout dateLayout = (LinearLayout)findViewById(R.id.main_date_layout);
+
+
+        myAnimation_Translate = nextAction == slideAnimAction.OPEN ?
+                new TranslateAnimation(
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 0f,
+                        Animation.RELATIVE_TO_SELF, 1f,
+                        Animation.RELATIVE_TO_SELF, 0f
+                ) : new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0f,
+                Animation.RELATIVE_TO_SELF, 0f,
+                Animation.RELATIVE_TO_SELF, 0f,
+                Animation.RELATIVE_TO_SELF, 1f
+        );
+        myAnimation_Translate.setDuration(400);
+        myAnimation_Translate.setInterpolator(AnimationUtils.loadInterpolator(
+                MainActivity.this,
+                android.R.anim.accelerate_decelerate_interpolator
+        ));
+        final LinearLayout menu_below = (LinearLayout) findViewById(R.id.main_menu_below);
+        final RelativeLayout _root_layout = (RelativeLayout) findViewById(R.id.main_top_relative_layout);
+        //curCalendarState should be safely visited here
+        if(curCalendarState == slideState.OPENING){
+             calendarLayout.setVisibility(View.VISIBLE);
+        }
+        myAnimation_Translate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                _root_layout.bringChildToFront(menu_below);
+                if(curCalendarState == slideState.OPENING) {
+                    dateLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (curCalendarState == slideState.OPENING) {
+                    curCalendarState = slideState.OPEN;
+                } else {
+                    curCalendarState = slideState.CLOSED;
+                    calendarLayout.setVisibility(View.GONE);
+                }
+                if(curCalendarState == slideState.CLOSED){
+                    dateLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        calendarLayout.startAnimation(myAnimation_Translate);
+    }
+
+
     /**
      * note: set and register actions for calendar
      * <p>
@@ -425,6 +463,11 @@ public class MainActivity extends FragmentActivity{
     private void setCalendar() {
         curCalendarState = slideState.CLOSED;
         final LinearLayout dateLayout = (LinearLayout) findViewById(R.id.main_date_layout);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View myCalendarView = inflater.inflate(R.layout.main_calendar_view, null);
+        final LinearLayout calendarLayout = (LinearLayout) myCalendarView
+                .findViewById(R.id.calendarView_layout);
         float width = AuxUtil.getScreenWidth(MainActivity.this), height = AuxUtil.getScreenWidth(MainActivity.this) * .87f;
         RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(
                 (int)width, (int)height
@@ -436,7 +479,7 @@ public class MainActivity extends FragmentActivity{
                 R.color.transparent
         ));
         calendarLayout.setVisibility(View.GONE);
-        mainDisplayLayout.addView(calendarLayout);
+        rootLayout.addView(calendarLayout);
 
 
         //register actions
@@ -474,18 +517,27 @@ public class MainActivity extends FragmentActivity{
      */
 
     private void setDisplay(){
-        mainDisplayLayout = (RelativeLayout)this.findViewById(R.id.main_display_layout);
-        ViewTreeObserver vto = rootLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        /*
+        displayFragment.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onGlobalLayout() {
-                int w = mainDisplayLayout.getWidth();
-                int h = mainDisplayLayout.getHeight();
-                Bitmap bmp = MemoryManager.loadBitmap(R.drawable.img016, w, h, 10016);
-                mainDisplayLayout.setBackground(new BitmapDrawable(bmp));
+            public void onClick(View v) {
+            //    startAnim(animStarter.CALENDAR, slideAnimAction.CLOSE);
+            //    startAnim(animStarter.LITTLE_MAP, slideAnimAction.CLOSE);
             }
         });
 
+    */
+/*
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.main_display_fragment);
+
+        if(fragment == null){
+            fragment = new ImageGridFragment();
+            fm.beginTransaction()
+                    .add(R.id.main_display_fragment, fragment)
+                    .commit();
+        }
+        */
     }
 
     private void setLittleMap(){
@@ -547,7 +599,7 @@ public class MainActivity extends FragmentActivity{
         //-----------------------LITTLE MAP LOGIC ED--------------------------
 
         myLittleMapLayout.setVisibility(View.GONE);
-        mainDisplayLayout.addView(myLittleMapLayout);
+        rootLayout.addView(myLittleMapLayout);
 
         locationLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -575,9 +627,8 @@ public class MainActivity extends FragmentActivity{
         setFigureMain();
         setMenuBelow();
         setDisplay();
-        //setBlur();
+        DataBaseHelper.init(this);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

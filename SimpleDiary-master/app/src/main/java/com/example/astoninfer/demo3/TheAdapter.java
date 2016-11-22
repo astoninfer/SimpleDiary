@@ -23,12 +23,12 @@ public class TheAdapter extends BaseAdapter {
     private List<Map<String,Object>> data;
     private LayoutInflater layoutInflater;
     private Context context;
-    private DataBaseHelper dbhelper;
+//    private DataBaseHelper dbhelper;
     private RecordListActivity recordListActivity;
     public TheAdapter(Context context, RecordListActivity recordListActivity) {
         data = new ArrayList<>();
         this.context = context;
-        dbhelper = new DataBaseHelper(context,EditorActivity.DATABASE);
+//        dbhelper = new DataBaseHelper(context,EditorActivity.DATABASE);
         this.recordListActivity = recordListActivity;
         this.layoutInflater = LayoutInflater.from(context);
 
@@ -74,8 +74,8 @@ public class TheAdapter extends BaseAdapter {
             content = (Content) convertView.getTag();
         }
         content.recordtitle.setText(data.get(position).get("title").toString());
-        content.recorddate.setText(data.get(position).get("date").toString());
-        content.recordaddress.setText(data.get(position).get("address").toString());
+        content.recorddate.setText("日期: " + data.get(position).get("date").toString());
+        content.recordaddress.setText("位置: " + data.get(position).get("address").toString());
         content.recordinfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +87,7 @@ public class TheAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 String path = data.get(position).get("path").toString();
-                dbhelper.deleteRecord(path);
+                DataBaseHelper.deleteRecord(path);
                 freshdata();
             }
         });
@@ -96,7 +96,7 @@ public class TheAdapter extends BaseAdapter {
 
     public void freshdata() {
         data.clear();
-        ArrayList<RecordFile> recordFiles = dbhelper.getAllRecord();
+        ArrayList<RecordFile> recordFiles = DataBaseHelper.getAllRecord();
         RecordFile rf = null;
         for(int i = 0;i < recordFiles.size();i++) {
             rf = recordFiles.get(i);
