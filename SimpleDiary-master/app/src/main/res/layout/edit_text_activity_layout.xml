@@ -36,7 +36,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
-            android:padding="10dp"
+            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             android:layerType="software">
         </com.example.astoninfer.demo3.richeditor.RichEditor>

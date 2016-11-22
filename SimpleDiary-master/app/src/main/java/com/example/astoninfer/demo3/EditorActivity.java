@@ -95,6 +95,7 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
     View.OnClickListener choosecolor;
     View.OnClickListener choosesize;
     String local_file = Environment.getExternalStorageDirectory().getAbsolutePath() + "/down/";
+    private RelativeLayout editViewMenuBar = null;
 
     RichEditor richEditor;
 
@@ -345,8 +346,10 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
 
         //note: initialize global layout
         editTextActivityLayout = (RelativeLayout)findViewById(R.id.edit_text_activity_layout);
+        editViewMenuBar = (RelativeLayout)this.findViewById(R.id.edit_view_menu_bar);
+        //editViewMenuBar.getBackground().setAlpha(95);
 
-        setBG(R.drawable.bj2);
+        setBG(R.drawable.letterpaper003);
 
         setMenuBelow();
 
@@ -753,7 +756,7 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
                 int w = editTextActivityLayout.getWidth(),
                         h = editTextActivityLayout.getHeight();
                 Bitmap bitmap = MemoryManager.loadBitmap(id, w, h, 10010);
-                bitmap = AuxUtil.blurBitmapByView(getBaseContext(), bitmap, 5);
+                //bitmap = AuxUtil.blurBitmapByView(getBaseContext(), bitmap, 5);
                 editTextActivityLayout.setBackground(new BitmapDrawable(bitmap));
                 //richEditor.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 //richEditor.getBackground().setAlpha(50);
@@ -764,7 +767,7 @@ public class EditorActivity extends SwipeBackActivity implements SwipeBackLayout
             @Override
             public void onGlobalLayout() {
                 richEditor.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                richEditor.setBackgroundColor(getResources().getColor(R.color.glass_mask));
+                //richEditor.setBackgroundColor(getResources().getColor(R.color.glass_mask));
                 //richEditor.getBackground().setAlpha(50);
             }
         });

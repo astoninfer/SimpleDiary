@@ -22,7 +22,7 @@
     <color name="colorPrimaryDark">#388e8e</color>
     <color name="colorPrimaryLight">#8fbcbc</color>
 
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/colorPrimaryLight</color>
     <color name="light_purple">#ff66ff</color>
     <color name="purple">#b300b1</color>
     <color name="clay_blue">#33adff</color>
@@ -33,6 +33,6 @@
     <color name="proper_grey">#4d4d4d</color>
     <color name="light_clay_blue">#b3e1ff</color>
     <color name="pure_black">#000000</color>
-    <color name="glass_mask">#80ffffff</color>
+    <color name="glass_mask">#19388e83</color>
     <color name="transparent">@android:color/transparent</color>
 </resources>

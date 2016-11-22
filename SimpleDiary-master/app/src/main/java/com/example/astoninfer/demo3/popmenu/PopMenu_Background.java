@@ -31,7 +31,11 @@ public class PopMenu_Background extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.editTextActivity = editTextActivity;
         imageview_id = new int[]{R.id.bg1,R.id.bg2,R.id.bg3};
-        drawable_id = new int[]{R.drawable.bj1,R.drawable.bj2,R.drawable.bj3};
+        drawable_id = new int[]{
+                R.drawable.letterpaper001,
+                R.drawable.letterpaper003,
+                R.drawable.letterpaper006,
+        };
         mMenuView = inflater.inflate(R.layout.choosebackground, null);
         for(int i = 0;i < imageview_id.length;i++) {
             bg_map.put(imageview_id[i],drawable_id[i]);
