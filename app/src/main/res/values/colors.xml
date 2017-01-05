@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary5">#3f8000</color>
+    <color name="colorPrimaryDark5">#264d00</color>
+
+    <color name="colorPrimary2">#2a2a6f</color>
+    <color name="colorPrimaryDark2">#262673</color>
+
+    <color name="colorPrimary3">#1a74ff</color>
+    <color name="colorPrimaryDark3">#005be6</color>
+
+    <color name="colorPrimary7">#6d93ff</color>
+    <color name="colorPrimaryDark7">#3383ff</color>
+
+    <color name="colorPrimary1">#b38d00</color>
+    <color name="colorPrimaryDark1">#806400</color>
+
+    <color name="colorPrimary6">#268080</color>
+    <color name="colorPrimaryDark6">#008080</color>
+
+    <color name="colorPrimary">#7f9ea0</color>
+    <color name="colorPrimaryDark">#388e8e</color>
+    <color name="colorPrimaryLight">#8fbcbc</color>
+
+    <color name="colorAccent">@color/colorPrimaryLight</color>
+    <color name="light_purple">#ff66ff</color>
+    <color name="purple">#b300b1</color>
+    <color name="clay_blue">#33adff</color>
+    <color name="light_green">#00cc44</color>
+    <color name="green">#009933</color>
+    <color name="light_orange">#ff8d1a</color>
+    <color name="pure_white">#ffff</color>
+    <color name="light_grey">#e6e6e6</color>
+    <color name="proper_grey">#4d4d4d</color>
+    <color name="light_proper_grey">#666666</color>
+    <color name="light_clay_blue">#b3e1ff</color>
+    <color name="pure_black">#000000</color>
+    <color name="glass_mask">#19388e83</color>
+    <color name="red">#ff00</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="pseduo_trans">#5000</color>
+</resources>

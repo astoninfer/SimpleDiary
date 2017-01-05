@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/act_register_topmenu"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary7"
+        android:alpha="0.75"
+        android:layout_height="65dp">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="注册"
+            android:gravity="center"
+            android:textColor="@color/pure_white"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_line"
+        android:showDividers="middle|beginning"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp">
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/act_register_usrname_ly"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <TextView
+                android:id="@+id/act_register_usrname_info_ly"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="用户名"
+                android:textSize="16sp"
+                android:inputType="none"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/act_register_usrname_fill_ly"
+                android:layout_weight="2"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:inputType="textAutoCorrect"
+                android:hint="your user name"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_corner_box"
+                android:textStyle="italic"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/act_register_phonenumber_ly"
+            android:layout_height="56dp">
+            <TextView
+                android:id="@+id/act_register_phonenumber_info_ly"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="手机号码"
+                android:textSize="16sp"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/act_register_phonenumber_fill_ly"
+                android:layout_weight="2"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:background="@drawable/round_corner_box"
+                android:hint="your phone number"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:maxLength="11"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/act_register_passwd_ly"
+            android:layout_height="56dp">
+            <TextView
+                android:id="@+id/act_register_pwd_info_ly"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="密码"
+                android:textSize="16sp"
+                android:gravity="center" />
+            <EditText
+                android:id="@+id/act_register_pwd_fill_ly"
+                android:layout_weight="2"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:background="@drawable/round_corner_box"
+                android:hint="password"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:inputType="textPassword"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/act_register_verdictcode_ly"
+            android:layout_height="56dp">
+            <Button
+                android:id="@+id/act_register_code_send_ly"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="3"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:background="@drawable/round_corner_btn_1"
+                android:text="发送验证码"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/act_register_code_fill_ly"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="2"
+                android:layout_width="120dp"
+                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                android:inputType="none"
+                android:maxLines="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:maxLength="20"
+                android:textStyle="italic"
+                android:background="@drawable/round_corner_box"
+                android:hint="verfication code"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/act_register_registe_ly"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_height="50dp"
+            android:background="@drawable/round_corner_btn_1"
+            android:text="开始注册"
+            android:textColor="@color/colorPrimary7"
+            android:textSize="17sp"/>
+    </LinearLayout>
+</LinearLayout>

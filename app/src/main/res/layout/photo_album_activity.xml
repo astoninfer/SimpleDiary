@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:id="@+id/album_root"
+    android:fitsSystemWindows="false"
+    android:paddingBottom="16dp"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/photo_album_act_top_menu"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary5"
+        android:alpha="0.8"
+        android:layout_height="65dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="17sp"
+            android:textColor="@color/pure_white"
+            android:gravity="center"
+            android:text="相册"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</LinearLayout>
